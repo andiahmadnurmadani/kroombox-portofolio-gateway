@@ -2,6 +2,11 @@ import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { KROOMBOX } from '../data.js';
 import { FadeIn, Stagger, itemFade } from '../components/Effects.jsx';
+import TextType from '../components/TextType.jsx';
+import RotatingText from '../components/RotatingText.jsx';
+import LogoLoop from '../components/LogoLoop.jsx';
+import MemberCard from '../components/MemberCard.jsx';
+import '../components/MemberCard.css';
 
 const milestones = [
   { y: '2024 Q1', t: 'Kroombox didirikan di Jakarta', d: 'Tiga co-founder mulai dari garasi dengan fokus hosting transparan.' },
@@ -58,18 +63,6 @@ function HeroIllustration() {
   );
 }
 
-function MemberCard({ m }) {
-  return (
-    <motion.div className="member-card" variants={itemFade}>
-      <div className="member-avatar">{m.initials}</div>
-      <div className="member-name">{m.name}</div>
-      <div className="member-role">{m.role}</div>
-      <div className="member-bio">{m.bio}</div>
-      <div className="member-metric"><b>{m.metric.value}</b>{m.metric.label}</div>
-    </motion.div>
-  );
-}
-
 export default function Home() {
   return (
     <>
@@ -101,11 +94,42 @@ export default function Home() {
             <FadeIn>
               <div className="hero-eyebrow">Kroombox Gateway / v2026.07</div>
               <h1 className="hero-title">
-                Hosting yang transparan, cepat, dan hijau.
+                Hosting yang
+                <RotatingText
+                  texts={['transparan,', 'cepat,', 'hijau.']}
+                  mainClassName="hero-rotate"
+                  splitBy="characters"
+                  staggerFrom="last"
+                  staggerDuration={0.022}
+                  rotationInterval={2400}
+                  transition={{ type: 'spring', damping: 28, stiffness: 380 }}
+                  initial={{ y: '100%', opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: '-120%', opacity: 0 }}
+                />
               </h1>
               <p className="hero-body">
                 {KROOMBOX.description} Platform infrastruktur untuk tim yang tidak ingin menebak-nebak tagihan atau membuang energi.
               </p>
+              <div className="hero-type-line">
+                <TextType
+                  text={[
+                    'Transparansi biaya, tanpa hidden fees.',
+                    'Infrastruktur cepat, latency rendah.',
+                    'Energi hijau, 83% renewable.',
+                  ]}
+                  typingSpeed={60}
+                  deletingSpeed={25}
+                  pauseDuration={2800}
+                  initialDelay={800}
+                  loop={true}
+                  showCursor={true}
+                  cursorCharacter="▌"
+                  cursorBlinkDuration={0.45}
+                  textColors={['var(--color-signal-orange)', 'var(--color-signal-orange)', 'var(--color-signal-orange)']}
+                  cursorClassName="hero-cursor"
+                />
+              </div>
               <div className="hero-actions">
                 <a className="btn btn-primary" href="#team">Lihat tim →</a>
                 <a className="btn btn-secondary" href="#features">Jelajahi produk</a>
@@ -211,7 +235,7 @@ export default function Home() {
           <FadeIn>
             <div className="kicker">04 / Team</div>
             <h2 className="section-title">{KROOMBOX.members.length} orang di <span>balik layar</span></h2>
-            <p className="section-subtitle">Klik avatar di sidebar kiri untuk detail lengkap setiap anggota.</p>
+            <p className="section-subtitle">Klik kartu anggota untuk melihat detail lengkap setiap individu.</p>
           </FadeIn>
           <Stagger className="team-grid" gap={0.06}>
             {KROOMBOX.members.map((m) => (
@@ -224,11 +248,20 @@ export default function Home() {
       <section className="partner-strip" id="partners">
         <div className="container">
           <div className="partner-label">Ditopang oleh partner</div>
-          <div className="partner-grid">
-            {KROOMBOX.partners.map((p) => (
-              <div key={p.name} className="partner-pill">{p.name}</div>
-            ))}
-          </div>
+        </div>
+        <div className="partner-loop">
+          <LogoLoop
+            logos={KROOMBOX.partnerLogos}
+            speed={45}
+            direction="left"
+            logoHeight={36}
+            gap={48}
+            hoverSpeed={0}
+            scaleOnHover
+            fadeOut
+            fadeOutColor="#fafafa"
+            ariaLabel="Partner Kroombox"
+          />
         </div>
       </section>
 
